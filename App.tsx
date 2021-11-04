@@ -1,10 +1,11 @@
+import { NavigationContainer } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { RecoilRoot } from "recoil";
-import MovieCard from "./app/components/MovieCard";
 import SafeAreaScreen from "./app/components/SafeAreaScreen";
+import AppBottomTab from "./app/navigation/AppBottomTab";
 import AppNavigation from "./app/navigation/AppNavigation";
 import MovieListScreen from "./app/screens/MovieListScreen";
 
@@ -14,7 +15,7 @@ export default function App() {
     <QueryClientProvider client={queryClient}>
       <RecoilRoot>
         <SafeAreaScreen>
-          <AppNavigation />
+            <AppBottomTab />
         </SafeAreaScreen>
       </RecoilRoot>
     </QueryClientProvider>

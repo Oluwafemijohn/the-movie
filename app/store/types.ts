@@ -73,10 +73,6 @@ interface IMovieList{
 }
 
 
-// https://api.themoviedb.org/3/discover/movie/rjkmN1dniUHVYAtwuV3Tji7FsDO.jpg
-// backdrop_path/lNyLSOKMMeUPr1RsL4KcRuIXwHt.jpg
-// poster_path/rjkmN1dniUHVYAtwuV3Tji7FsDO.jpg
-
 interface IMovieListResponseType {
     page:number;
     results: IMovieList[];
@@ -84,8 +80,36 @@ interface IMovieListResponseType {
     total_pages:number
 }
 
-//  interface IMovie{
-//     status_message:string;
-//     error_message:IMovePayload;
-//     status_code:number;
-//  }
+interface IMoveDetails{
+   adult:boolean;
+   backdrop_path:string;
+   genre_ids: number[];
+   id:number;
+   original_language:string;
+   original_title:string;
+   overview:string;
+   popularity:number;
+   poster_path: string;
+   release_date:string;
+   title:string;
+   video:boolean;
+   vote_average:number;
+   vote_count:number
+}
+
+
+interface IMovieDetailsListResponseType {
+   page:number;
+   results: IMoveDetails;
+   total_results:number;
+   total_pages:number;
+}
+
+interface IMovieKey{
+   key:string;
+}
+
+interface VideoResponse{
+   key:string;
+   results: IMovieKey[]
+}

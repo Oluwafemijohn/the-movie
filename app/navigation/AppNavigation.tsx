@@ -7,12 +7,10 @@ import MovieDetailsScreen from '../screens/MovieDetailsScreen';
 const Stack = createNativeStackNavigator();
 function AppNavigation() {
     return (
-        <NavigationContainer>
         <Stack.Navigator >
           <Stack.Screen name="MovieListScreen" component={MovieListScreen} />
           <Stack.Screen name="MovieDetailsScreen" component={MovieDetailsScreen} />
         </Stack.Navigator>
-      </NavigationContainer>
     );
 }
 

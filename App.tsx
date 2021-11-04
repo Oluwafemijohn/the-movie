@@ -8,14 +8,32 @@ import SafeAreaScreen from "./app/components/SafeAreaScreen";
 import AppBottomTab from "./app/navigation/AppBottomTab";
 import AppNavigation from "./app/navigation/AppNavigation";
 import MovieListScreen from "./app/screens/MovieListScreen";
+import NetInfo, { useNetInfo } from "@react-native-community/netinfo";
+import showToast from "./app/components/toast";
 
 const queryClient = new QueryClient();
 export default function App() {
+  // NetInfo.fetch().then(state => {
+  //   console.log('Connection type', state);
+  // });
+  // NetInfo.addEventListener((state) =>  console.log(state) );
+
+  const netInfo = useNetInfo();
+  // if (!netInfo.isInternetReachable) {
+  //   showToast("No internet, Please check your internet connection");
+  // }
+
   return (
     <QueryClientProvider client={queryClient}>
       <RecoilRoot>
         <SafeAreaScreen>
-            <AppBottomTab />
+          <AppBottomTab />
+          {/* {netInfo.isConnected && netInfo.isInternetReachable ? (
+          ) : (
+            <Text style={styles.noInternetMessage}>
+              No internet, Please check your internet connection
+            </Text>
+          )} */}
         </SafeAreaScreen>
       </RecoilRoot>
     </QueryClientProvider>
@@ -28,5 +46,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+  },
+  noInternetMessage: {
+    fontSize: 20,
+    textAlign: "center",
+    marginTop: 100,
+    color: "red",
   },
 });

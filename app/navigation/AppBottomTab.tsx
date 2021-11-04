@@ -13,13 +13,14 @@ function AppBottomTab() {
     <NavigationContainer>
       <Tab.Navigator>
         <Tab.Screen
-          name="Movies"
+          name="MoviesTab"
           component={AppNavigation}
           options={{
             headerShown: false,
             tabBarIcon: ({ size, color }) => (
               <MaterialCommunityIcons name="movie" size={size} color={color} />
             ),
+            title:"Movies"
           }}
         />
         <Tab.Screen

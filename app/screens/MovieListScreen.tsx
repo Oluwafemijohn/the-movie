@@ -17,12 +17,17 @@ import {
 import { API_KEY, BASE_URL, img_300 } from "../store/Constants";
 import axios, { AxiosResponse } from "axios";
 import  { useNetInfo } from '@react-native-community/netinfo';
+import { useRecoilState, useRecoilValue } from "recoil";
+
+import _ from "lodash";
 
 function MovieListScreen(props: any) {
   const [page, setPage] = useState(1);
   const [content, setContent] = useState<IMovieListResponseType>();
   const [isLoading, setIsLoading] = useState(false);
   // const [data, setData] = useState([]);
+  // const favorites = useRecoilValue(useGlobalFavoriteState);
+
 
   const fetchMovies2 = () => {
     setIsLoading(true);

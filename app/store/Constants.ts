@@ -16,3 +16,4 @@ export const TOKEN =
 
 
 export const FAVORITE_ATOM_KEY = "@FAVORITE_ATOM_KEY";
+export const FAVORITE_ATOM_CHECK_KEY = "@FAVORITE_ATOM_CHECK_KEY";

@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Image,
   Text,
   View,
   StyleSheet,
-  Button,
   Pressable,
   ActivityIndicator,
 } from "react-native";
@@ -20,6 +19,7 @@ import defaultStyle from "../store/defaultStyle";
 import { useGlobalFavoriteState } from "../store/globalState";
 import { useRecoilState } from "recoil";
 import _ from "lodash";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function MovieDetailsScreen(props: any) {
   const id = props.route.params;
@@ -28,18 +28,33 @@ function MovieDetailsScreen(props: any) {
   const videoKey = videoDetails.data?.data.results[0].key;
   const movieContent = movieDetails.data?.data;
   const [favorite, setFavorite] = useRecoilState(useGlobalFavoriteState);
+  // const  favoriteCheck = useRecoilValue(useFavoriteCheck);
+  // const arr = favorite.filter(item => item.id === movieContent?.id);
+  // console.log(movieContent)
 
-  const favoriteCheck = _.some(
-    favorite,
-    (favorite: IMoveDetails | undefined) => {
-      return favorite === movieContent;
+  const arrCheck = favorite.filter((item) => item.id === movieContent?.id);
+
+  const storeData = async (value: IMoveDetails[]) => {
+    try {
+      const jsonValue = JSON.stringify(value);
+      const val = await AsyncStorage.setItem("@storage_Key", jsonValue);
+    } catch (e) {
+      console.log(e);
     }
-  );
+  };
+
+  storeData(favorite);
+
+  // const favoriteCheck = _.some(
+  //   favorite,
+  //   (favorite: IMoveDetails | undefined) => {
+  //     return favorite === movieContent;
+  //   }
+  // );
 
   return (
     <View style={styles.container}>
-
-      { movieDetails.isLoading ? (
+      {movieDetails.isLoading ? (
         <ActivityIndicator size="large" color={defaultStyle.colors.primary} />
       ) : (
         <View>
@@ -76,19 +91,37 @@ function MovieDetailsScreen(props: any) {
             </Pressable>
             <Pressable
               onPress={() => {
-                !favoriteCheck
-                  ? setFavorite([...favorite, movieContent!])
-                  : setFavorite(
+                // if (arrCheck.length === 1) {
+                //   setFavorite(
+                //     favorite.filter(
+                //       (currentFavorite) => currentFavorite !== movieContent
+                //     )
+                //   );
+                // } else {
+                //   setFavorite([...favorite, movieContent!]);
+                // }
+
+                // !favoriteCheck
+                //   ? setFavorite([...favorite, movieContent!])
+                //   : setFavorite(
+                //       favoriter.filter(
+                //         (currentFavorite) => currentFavorite !== movieContent
+                //       )
+                //     );
+
+                arrCheck.length === 1
+                  ? setFavorite(
                       favorite.filter(
                         (currentFavorite) => currentFavorite !== movieContent
                       )
-                    );
+                    )
+                  : setFavorite([...favorite, movieContent!]);
               }}
             >
-              {!favoriteCheck ? (
-                <MaterialIcons name="favorite-border" size={24} color="black" />
-              ) : (
+              {arrCheck.length === 1 ? (
                 <MaterialIcons name="favorite" size={24} color="red" />
+              ) : (
+                <MaterialIcons name="favorite-border" size={24} color="black" />
               )}
             </Pressable>
           </View>

@@ -1,4 +1,4 @@
-import React, { useState, useRef, RefObject } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Text,
   View,
@@ -8,83 +8,82 @@ import {
   TouchableWithoutFeedback,
   ActivityIndicator,
 } from "react-native";
-import { fetchMovies, fetchMovies2 } from "../store/Server";
 import defaultStyle from "../store/defaultStyle";
-import {
-  widthPercentageToDP as WP,
-  heightPercentageToDP as HP,
-} from "react-native-responsive-screen";
-import { API_KEY, BASE_URL, img_300 } from "../store/Constants";
-import axios, { AxiosResponse } from "axios";
-import  { useNetInfo } from '@react-native-community/netinfo';
-import { useRecoilState, useRecoilValue } from "recoil";
-
-import _ from "lodash";
+import { widthPercentageToDP as WP } from "react-native-responsive-screen";
+import { API_KEY, img_300 } from "../store/Constants";
+import axios from "axios";
 
 function MovieListScreen(props: any) {
   const [page, setPage] = useState(1);
-  const [content, setContent] = useState<IMovieListResponseType>();
+  const [newData, setNewData] = useState<IMovieList[]>([]);
+  const [pageNumber, setPageNumber] = useState(2);
   const [isLoading, setIsLoading] = useState(false);
-  // const [data, setData] = useState([]);
-  // const favorites = useRecoilValue(useGlobalFavoriteState);
 
 
-  const fetchMovies2 = () => {
+
+  const fetchMovies = () => {
     setIsLoading(true);
     axios
-      .get(`${BASE_URL}discover/movie${API_KEY}&page=${page}`)
+      .get(
+        `https://api.themoviedb.org/3/discover/movie${API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=${page}`
+      )
       .then((response) => {
-        setContent({ ...content, ...response?.data });
+        setNewData([...newData!, ...response?.data?.results]);
+        setPageNumber(response?.data.total_pages);
+        console.log("call");
         setIsLoading(false);
       });
   };
 
-  let screenRef: FlatList<IMovieList> | null;
+  const fetchMore = () => {
+    if (page < pageNumber) {
+      setPage(page + 1);
+      console.log(page);
+    }
+  };
 
-  // const { data: response, fetchNextPage } = fetchMovies();
-  React.useEffect(() => {
-    // setData(response?.pages[response?.pages.length - 1].results);
-    fetchMovies2();
+  useEffect(() => {
+    fetchMovies();
   }, [page]);
 
   return (
     <View style={styles.container}>
-      
-      {isLoading ? (
-        <ActivityIndicator style={styles.activityIndicator} size="large" color="#ff0000" />
-      ) : (
-        <FlatList
-          ref={(ref) => {
-            screenRef = ref;
-          }}
-          // data={data}
-          data={content?.results}
-          renderItem={({ item }) => (
-            <TouchableWithoutFeedback
-              onPress={() => {
-                props.navigation.navigate("MovieDetailsScreen", item.id);
-              }}
-            >
-              <View style={styles.listContainer}>
-                <Image
-                  source={{ uri: `${img_300}/${item.backdrop_path}` }}
-                  style={styles.image}
+      <FlatList
+        data={newData}
+        renderItem={({ item }) => (
+          <TouchableWithoutFeedback
+            onPress={() => {
+              props.navigation.navigate("MovieDetailsScreen", item.id);
+            }}
+          >
+            <View style={styles.listContainer}>
+              <Image
+                source={{ uri: `${img_300}/${item.backdrop_path}` }}
+                style={styles.image}
+              />
+
+              <Text style={styles.detailContainer}>{item.title}</Text>
+            </View>
+          </TouchableWithoutFeedback>
+        )}
+        keyExtractor={(item) => item.id.toString()}
+        onEndReached={() => fetchMore()}
+        onEndReachedThreshold={20}
+        ListHeaderComponent={() => {
+          return (
+            <View>
+              {isLoading && (
+                <ActivityIndicator
+                  style={styles.activityIndicator}
+                  size="large"
+                  color="#ff0000"
                 />
-                <Text style={styles.detailContainer}>{item.title}</Text>
-              </View>
-            </TouchableWithoutFeedback>
-          )}
-          keyExtractor={(item) => `${item.id}`}
-          onEndReachedThreshold={0}
-          onEndReached={() => {
-            setPage(page + 1);
-            // response2 = fetchMovies2(page);
-            screenRef!.scrollToOffset({
-              offset: 0,
-            });
-          }}
-        />
-      )}
+              )}
+            </View>
+          );
+        }}
+   
+      />
     </View>
   );
 }
@@ -95,7 +94,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     height: "100%",
-    alignSelf: "auto"
+    alignSelf: "auto",
   },
   container: {
     flex: 1,

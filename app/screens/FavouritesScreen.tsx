@@ -1,7 +1,7 @@
 import React from "react";
 import { FlatList, Text, View, StyleSheet, Image } from "react-native";
 import { useRecoilValue } from "recoil";
-import { img_500 } from "../store/Constants";
+import { FAVORITE_CACHE_KEY, img_500 } from "../store/Constants";
 import { useGlobalFavoriteState } from "../store/globalState";
 import {
   widthPercentageToDP as WP,
@@ -10,9 +10,14 @@ import {
 import defaultStyle from "../store/defaultStyle";
 import _ from "lodash";
 import ListItemSeparator from "../components/ListItemSeparator";
+import { getData2 } from "../store/cache";
 
 function FavouritesScreen() {
+
   const favorites = useRecoilValue(useGlobalFavoriteState);
+  const data = getData2(FAVORITE_CACHE_KEY)
+  
+
   const emptyFavoritesList = _.isEmpty(favorites);
 
   return (

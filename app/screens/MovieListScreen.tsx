@@ -19,8 +19,6 @@ function MovieListScreen(props: any) {
   const [pageNumber, setPageNumber] = useState(2);
   const [isLoading, setIsLoading] = useState(false);
 
-
-
   const fetchMovies = () => {
     setIsLoading(true);
     axios
@@ -34,13 +32,7 @@ function MovieListScreen(props: any) {
         setIsLoading(false);
       });
   };
-
-  const fetchMore = () => {
-    if (page < pageNumber) {
-      setPage(page + 1);
-      console.log(page);
-    }
-  };
+  
 
   useEffect(() => {
     fetchMovies();
@@ -67,7 +59,12 @@ function MovieListScreen(props: any) {
           </TouchableWithoutFeedback>
         )}
         keyExtractor={(item) => item.id.toString()}
-        onEndReached={() => fetchMore()}
+        onEndReached={() => {
+          if (page < pageNumber) {
+            setPage(page + 1);
+            console.log(page);
+          }
+        }}
         onEndReachedThreshold={20}
         ListHeaderComponent={() => {
           return (

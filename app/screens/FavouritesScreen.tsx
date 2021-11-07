@@ -1,6 +1,14 @@
-import React from "react";
-import { FlatList, Text, View, StyleSheet, Image } from "react-native";
-import { useRecoilValue } from "recoil";
+import React, { useState } from "react";
+import {
+  FlatList,
+  Text,
+  View,
+  StyleSheet,
+  Image,
+  TouchableWithoutFeedback,
+  Pressable,
+} from "react-native";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { FAVORITE_CACHE_KEY, img_500 } from "../store/Constants";
 import { useGlobalFavoriteState } from "../store/globalState";
 import {
@@ -10,14 +18,18 @@ import {
 import defaultStyle from "../store/defaultStyle";
 import _ from "lodash";
 import { getData2 } from "../store/cache";
+import Route from "../navigation/Route";
+import { MaterialIcons } from "@expo/vector-icons";
 
-function FavouritesScreen() {
+function FavouritesScreen(props: any) {
+  const [favorite, setFavorite] = useRecoilState(useGlobalFavoriteState);
 
-  const favorites = useRecoilValue(useGlobalFavoriteState);
-  const data = getData2(FAVORITE_CACHE_KEY)
-  
 
-  const emptyFavoritesList = _.isEmpty(favorites);
+  const data = getData2(FAVORITE_CACHE_KEY);
+
+  const emptyFavoritesList = _.isEmpty(favorite);
+
+  // const arrCheck = favorite.filter((item) => item.id === favorite);
 
   return (
     <View style={styles.container}>
@@ -27,23 +39,44 @@ function FavouritesScreen() {
         </Text>
       ) : (
         <FlatList
-          data={favorites}
+          data={favorite}
           keyExtractor={(item) => `${item.id}`}
           renderItem={({ item }) => (
-            <View style={styles.flatListContainer}>
-              <Image
-                source={{ uri: `${img_500}/${item.poster_path}` }}
-                style={styles.image}
-              />
-              <View style={styles.textContainer}>
-                <Text style={styles.titleText}>Title - {item.title} </Text>
-                <Text style={styles.overview}>Overview - {item.overview} </Text>
+            <TouchableWithoutFeedback
+              onPress={() => {
+                props.navigation.navigate(Route.MOVIE_DETAILS_SCREEN, item.id);
+              }}
+            >
+              <View style={styles.flatListContainer}>
+                <Image
+                  source={{ uri: `${img_500}/${item.poster_path}` }}
+                  style={styles.image}
+                />
+                <View style={styles.textContainer}>
+                  <Text style={styles.titleText}>Title - {item.title} </Text>
+                  <Text style={styles.overview}>
+                    Overview - {item.overview}{" "}
+                  </Text>
+                  <Pressable
+                    onPress={() => {
+                      setFavorite((prevState) => {
+                        return prevState.filter(
+                          (currentItem) => currentItem.id !== item.id
+                        );
+                      });
+                    }}
+                  >
+                    <View style={styles.favorite}>
+                      <MaterialIcons name="favorite" size={24} color="red" />
+                    </View>
+                  </Pressable>
+                </View>
               </View>
-            </View>
+            </TouchableWithoutFeedback>
           )}
-        //   ItemSeparatorComponent={()=>(
-        //      <ListItemSeparator /> 
-        //   )}
+          //   ItemSeparatorComponent={()=>(
+          //      <ListItemSeparator />
+          //   )}
         />
       )}
     </View>
@@ -76,14 +109,20 @@ const styles = StyleSheet.create({
     fontStyle: "italic",
     fontSize: 20,
   },
-  flatListContainer:{
-      marginTop: WP(4),
-      backgroundColor: "white",
-      borderRadius: WP(2),
+  flatListContainer: {
+    marginTop: WP(4),
+    backgroundColor: "white",
+    borderRadius: WP(2),
+    paddingBottom: WP(4),
   },
-  textContainer:{
-      padding: WP(2)
-  }
+  textContainer: {
+    padding: WP(2),
+  },
+  favorite: {
+    position: "absolute",
+    right: WP(2),
+    // top: WP(2),
+  },
 });
 
 export default FavouritesScreen;

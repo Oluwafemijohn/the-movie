@@ -29,7 +29,6 @@ import YoutubePlayer from "react-native-youtube-iframe";
 import Route from "../navigation/Route";
 
 function MovieDetailsScreen(props: any) {
-  //   const navigation = useNavigation();
   const id = props.route.params;
   const movieDetails = fetchMoviesDetails(id);
   const videoDetails = fetchVideosDetails(id);
@@ -38,25 +37,6 @@ function MovieDetailsScreen(props: any) {
   const [favorite, setFavorite] = useRecoilState(useGlobalFavoriteState);
 
   const arrCheck = favorite.filter((item) => item.id === movieContent?.id);
-
-  // const storeData = async (value: IMoveDetails[]) => {
-  //   try {
-  //    const jsonValue = JSON.stringify(value);
-  //     await AsyncStorage.setItem("@storage_Key", jsonValue);
-  //     const val = await AsyncStorage.getItem("@storage_Key");
-  //     console.log(val);
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // };
-
-  // const favoriteCheck = _.some(
-  //   favorite,
-  //   (favorite: IMoveDetails | undefined) => {
-  //     return favorite === movieContent;
-  //   }
-  // );
-
 
 
   return (
@@ -122,20 +102,11 @@ function MovieDetailsScreen(props: any) {
                       setFavorite(
                         favorite.filter((item) => item !== movieContent)
                       );
-                      // storeData(FAVORITE_CACHE_KEY,favorite)
+                      storeData(FAVORITE_CACHE_KEY,favorite)
                     } else {
                       setFavorite([...favorite, movieContent!]);
                       // storeData(FAVORITE_CACHE_KEY,favorite)
                     }
-
-                    // arrCheck.length === 1
-                    //   ? setFavorite(
-                    //       favorite.filter(
-                    //         (currentFavorite) =>
-                    //           currentFavorite !== movieContent
-                    //       )
-                    //     )
-                    //   : setFavorite([...favorite, movieContent!]);
                   }}
                 >
                   <View style={styles.favorite}>

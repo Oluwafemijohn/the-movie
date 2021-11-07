@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 import {
   Image,
   Text,
@@ -7,6 +7,8 @@ import {
   Pressable,
   ActivityIndicator,
   ScrollView,
+  Alert,
+  Button,
 } from "react-native";
 import { FAVORITE_CACHE_KEY, img_300 } from "../store/Constants";
 import { fetchMoviesDetails, fetchVideosDetails } from "../store/Server";
@@ -22,6 +24,8 @@ import { useRecoilState } from "recoil";
 import _ from "lodash";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { storeData } from "../store/cache";
+import { Rating, AirbnbRating } from "react-native-ratings";
+import YoutubePlayer from "react-native-youtube-iframe";
 
 function MovieDetailsScreen(props: any) {
   const id = props.route.params;
@@ -44,14 +48,25 @@ function MovieDetailsScreen(props: any) {
   //   }
   // };
 
- 
-
   // const favoriteCheck = _.some(
   //   favorite,
   //   (favorite: IMoveDetails | undefined) => {
   //     return favorite === movieContent;
   //   }
   // );
+
+  const [playing, setPlaying] = useState(false);
+
+  const onStateChange = useCallback((state) => {
+    if (state === "ended") {
+      setPlaying(false);
+      Alert.alert("video has finished playing!");
+    }
+  }, []);
+
+  const togglePlaying = useCallback(() => {
+    setPlaying((prev) => !prev);
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -73,11 +88,21 @@ function MovieDetailsScreen(props: any) {
               <Text style={styles.text}>
                 Overview - {movieContent?.overview}{" "}
               </Text>
+              <View style={styles.votingAverage} >
+                <Text style={styles.text}>Vote average </Text>
+                <Rating
+                  showRating
+                  fractions={1}
+                  startingValue={movieContent?.vote_average}
+                  imageSize={20}
+                  style={{ paddingVertical: 10 }}
+                  ratingCount={10}
+                />
+              </View>
+
+              {console.log(movieContent?.vote_average)}
               <Text style={styles.text}>
-                Vote average - {movieContent?.vote_average}{" "}
-              </Text>
-              <Text style={styles.text}>
-                Vote count - {movieContent?.vote_count}{" "}
+                Vote count - {Math.ceil(movieContent?.vote_count! / 2)}{" "}
               </Text>
               <Text style={styles.text}>
                 Original language - {movieContent?.original_language}{" "}
@@ -88,26 +113,38 @@ function MovieDetailsScreen(props: any) {
               <View style={styles.trailerAndFavorite}>
                 <Pressable
                   style={styles.button}
-                  onPress={() => {
-                    Linking.openURL(
-                      `https://www.youtube.com/watch?v=${videoKey}`
-                    );
-                  }}
+                  onPress={() => 
+                    // {
+                    // Linking.openURL(
+                    //   `https://www.youtube.com/watch?v=${videoKey}`
+                    // );
+                    (
+                      <View>
+                        <YoutubePlayer
+                          height={300}
+                          play={playing}
+                          videoId={videoKey!}
+                          onChangeState={onStateChange}
+                        />
+                        <Button title={playing ? "pause" : "play"} onPress={togglePlaying} />
+                      </View>
+                    )
+                  // }
+                }
                 >
                   <Text style={styles.trailerText}>Trailers</Text>
                 </Pressable>
                 <Pressable
                   onPress={() => {
                     if (arrCheck.length === 1) {
-                      setFavorite(favorite.filter((item) => item !== movieContent));
+                      setFavorite(
+                        favorite.filter((item) => item !== movieContent)
+                      );
                       // storeData(FAVORITE_CACHE_KEY,favorite)
-
                     } else {
                       setFavorite([...favorite, movieContent!]);
                       // storeData(FAVORITE_CACHE_KEY,favorite)
-                      
                     }
-
 
                     // arrCheck.length === 1
                     //   ? setFavorite(
@@ -180,6 +217,12 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     marginBottom: HP(8),
+  },
+  votingAverage: {
+    flexDirection: "column",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: WP(4),
   },
 });
 

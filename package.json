@@ -23,11 +23,13 @@
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "react-native": "0.64.2",
+    "react-native-ratings": "^8.1.0",
     "react-native-responsive-screen": "^1.4.2",
     "react-native-safe-area-context": "3.3.2",
     "react-native-screens": "~3.8.0",
     "react-native-smart-tip": "^2.3.0",
     "react-native-web": "0.17.1",
+    "react-native-youtube-iframe": "^2.1.2",
     "react-query": "^3.29.0",
     "recoil": "^0.4.1"
   },

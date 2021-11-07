@@ -9,7 +9,6 @@ import {
 } from "react-native-responsive-screen";
 import defaultStyle from "../store/defaultStyle";
 import _ from "lodash";
-import ListItemSeparator from "../components/ListItemSeparator";
 import { getData2 } from "../store/cache";
 
 function FavouritesScreen() {

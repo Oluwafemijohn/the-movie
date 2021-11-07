@@ -5,6 +5,7 @@ import FavouritesScreen from "../screens/FavouritesScreen";
 import { NavigationContainer } from "@react-navigation/native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
+import Route from "./Route";
 
 const Tab = createBottomTabNavigator();
 
@@ -13,7 +14,7 @@ function AppBottomTab() {
     <NavigationContainer>
       <Tab.Navigator>
         <Tab.Screen
-          name="MoviesTab"
+          name={Route.MOVIES_TAB}
           component={AppNavigation}
           options={{
             headerShown: false,
@@ -24,7 +25,7 @@ function AppBottomTab() {
           }}
         />
         <Tab.Screen
-          name="Favourites"
+          name={Route.FAVORITES}
           component={FavouritesScreen}
           options={{
             tabBarIcon: ({ size, color }) => (

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Text,
   View,
@@ -12,6 +12,7 @@ import defaultStyle from "../store/defaultStyle";
 import { widthPercentageToDP as WP } from "react-native-responsive-screen";
 import { API_KEY, img_300 } from "../store/Constants";
 import axios from "axios";
+import Route from "../navigation/Route";
 
 function MovieListScreen(props: any) {
   const [page, setPage] = useState(1);
@@ -28,11 +29,9 @@ function MovieListScreen(props: any) {
       .then((response) => {
         setNewData([...newData!, ...response?.data?.results]);
         setPageNumber(response?.data.total_pages);
-        console.log("call");
         setIsLoading(false);
       });
   };
-  
 
   useEffect(() => {
     fetchMovies();
@@ -45,7 +44,7 @@ function MovieListScreen(props: any) {
         renderItem={({ item }) => (
           <TouchableWithoutFeedback
             onPress={() => {
-              props.navigation.navigate("MovieDetailsScreen", item.id);
+              props.navigation.navigate(Route.MOVIE_DETAILS_SCREEN, item.id);
             }}
           >
             <View style={styles.listContainer}>
@@ -53,7 +52,6 @@ function MovieListScreen(props: any) {
                 source={{ uri: `${img_300}/${item.backdrop_path}` }}
                 style={styles.image}
               />
-
               <Text style={styles.detailContainer}>{item.title}</Text>
             </View>
           </TouchableWithoutFeedback>
@@ -62,7 +60,6 @@ function MovieListScreen(props: any) {
         onEndReached={() => {
           if (page < pageNumber) {
             setPage(page + 1);
-            console.log(page);
           }
         }}
         onEndReachedThreshold={20}
@@ -79,7 +76,6 @@ function MovieListScreen(props: any) {
             </View>
           );
         }}
-   
       />
     </View>
   );

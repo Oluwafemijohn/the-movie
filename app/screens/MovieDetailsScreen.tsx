@@ -26,8 +26,10 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { storeData } from "../store/cache";
 import { Rating, AirbnbRating } from "react-native-ratings";
 import YoutubePlayer from "react-native-youtube-iframe";
+import Route from "../navigation/Route";
 
 function MovieDetailsScreen(props: any) {
+  //   const navigation = useNavigation();
   const id = props.route.params;
   const movieDetails = fetchMoviesDetails(id);
   const videoDetails = fetchVideosDetails(id);
@@ -55,18 +57,7 @@ function MovieDetailsScreen(props: any) {
   //   }
   // );
 
-  const [playing, setPlaying] = useState(false);
 
-  const onStateChange = useCallback((state) => {
-    if (state === "ended") {
-      setPlaying(false);
-      Alert.alert("video has finished playing!");
-    }
-  }, []);
-
-  const togglePlaying = useCallback(() => {
-    setPlaying((prev) => !prev);
-  }, []);
 
   return (
     <View style={styles.container}>
@@ -114,22 +105,13 @@ function MovieDetailsScreen(props: any) {
                 <Pressable
                   style={styles.button}
                   onPress={() => 
-                    // {
+                    {
                     // Linking.openURL(
                     //   `https://www.youtube.com/watch?v=${videoKey}`
                     // );
-                    (
-                      <View>
-                        <YoutubePlayer
-                          height={300}
-                          play={playing}
-                          videoId={videoKey!}
-                          onChangeState={onStateChange}
-                        />
-                        <Button title={playing ? "pause" : "play"} onPress={togglePlaying} />
-                      </View>
-                    )
-                  // }
+                    props.navigation.navigate(Route.TRAILERS, videoKey)
+                  
+                  }
                 }
                 >
                   <Text style={styles.trailerText}>Trailers</Text>

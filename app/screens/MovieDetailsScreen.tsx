@@ -58,7 +58,7 @@ function MovieDetailsScreen(props: any) {
                 Overview - {movieContent?.overview}{" "}
               </Text>
               <View style={styles.votingAverage} >
-                <Text style={styles.text}>Vote average </Text>
+                <Text style={styles.textLower}>Vote average </Text>
                 <Rating
                   showRating
                   fractions={1}
@@ -68,15 +68,19 @@ function MovieDetailsScreen(props: any) {
                   ratingCount={10}
                 />
               </View>
-              <Text style={styles.text}>
+              <View style={styles.votingLanguagePopularityContainer}>
+              <Text style={styles.textLower}>
                 Vote count - {Math.ceil(movieContent?.vote_count! / 2)}{" "}
               </Text>
-              <Text style={styles.text}>
-                Original language - {movieContent?.original_language}{" "}
+              <Text style={styles.textLower}>
+                Language - {movieContent?.original_language}{" "}
               </Text>
-              <Text style={styles.text}>
+              <Text style={styles.textLower}>
                 Popularity - {movieContent?.popularity}{" "}
               </Text>
+              </View>
+
+              
               <View style={styles.trailerAndFavorite}>
                 <Pressable
                   style={styles.button}
@@ -143,6 +147,13 @@ const styles = StyleSheet.create({
   text: {
     marginTop: WP(4),
     fontSize: WP(4),
+
+  },
+  textLower: {
+    marginTop: WP(1),
+    fontSize: WP(4),
+    borderWidth: 1, 
+    padding: WP(1.5),
   },
   titleText: {
     fontWeight: "bold",
@@ -172,6 +183,13 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     marginBottom: WP(4),
+  },
+  votingLanguagePopularityContainer: {
+    flexDirection: "column",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: WP(4),
+
   },
 });
 

@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React from "react";
 import {
   Image,
   Text,
@@ -7,12 +7,9 @@ import {
   Pressable,
   ActivityIndicator,
   ScrollView,
-  Alert,
-  Button,
 } from "react-native";
 import { FAVORITE_CACHE_KEY, img_300 } from "../store/Constants";
 import { fetchMoviesDetails, fetchVideosDetails } from "../store/Server";
-import * as Linking from "expo-linking";
 import { MaterialIcons } from "@expo/vector-icons";
 import {
   widthPercentageToDP as WP,
@@ -22,10 +19,10 @@ import defaultStyle from "../store/defaultStyle";
 import { useGlobalFavoriteState } from "../store/globalState";
 import { useRecoilState } from "recoil";
 import _ from "lodash";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import { storeData } from "../store/cache";
-import { Rating, AirbnbRating } from "react-native-ratings";
-import YoutubePlayer from "react-native-youtube-iframe";
+import { Rating } from "react-native-ratings";
+
 import Route from "../navigation/Route";
 
 function MovieDetailsScreen(props: any) {
@@ -70,8 +67,6 @@ function MovieDetailsScreen(props: any) {
                   ratingCount={10}
                 />
               </View>
-
-              {console.log(movieContent?.vote_average)}
               <Text style={styles.text}>
                 Vote count - {Math.ceil(movieContent?.vote_count! / 2)}{" "}
               </Text>
@@ -102,10 +97,10 @@ function MovieDetailsScreen(props: any) {
                       setFavorite(
                         favorite.filter((item) => item !== movieContent)
                       );
-                      storeData(FAVORITE_CACHE_KEY,favorite)
+                      storeData(FAVORITE_CACHE_KEY,favorite.filter((item) => item !== movieContent))
                     } else {
                       setFavorite([...favorite, movieContent!]);
-                      // storeData(FAVORITE_CACHE_KEY,favorite)
+                      storeData(FAVORITE_CACHE_KEY,favorite)
                     }
                   }}
                 >

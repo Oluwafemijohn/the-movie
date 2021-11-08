@@ -17,19 +17,33 @@ import {
 } from "react-native-responsive-screen";
 import defaultStyle from "../store/defaultStyle";
 import _ from "lodash";
-import { getData2 } from "../store/cache";
+import { getData2, storeData } from "../store/cache";
 import Route from "../navigation/Route";
 import { MaterialIcons } from "@expo/vector-icons";
+import NetInfo, { useNetInfo } from "@react-native-community/netinfo";
 
 function FavouritesScreen(props: any) {
   const [favorite, setFavorite] = useRecoilState(useGlobalFavoriteState);
+  const netInfo = useNetInfo();
 
 
   const data = getData2(FAVORITE_CACHE_KEY);
 
   const emptyFavoritesList = _.isEmpty(favorite);
 
-  // const arrCheck = favorite.filter((item) => item.id === favorite);
+  getData2(FAVORITE_CACHE_KEY)
+    .then((data) => {
+      if (!netInfo.isInternetReachable) {
+        setFavorite(data as IMoveDetails[]);
+      }
+        
+      // }
+      // setFavorite(data);
+      console.log("data", data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 
   return (
     <View style={styles.container}>
@@ -64,6 +78,7 @@ function FavouritesScreen(props: any) {
                           (currentItem) => currentItem.id !== item.id
                         );
                       });
+                      storeData(FAVORITE_CACHE_KEY, favorite.filter((currentItem) => currentItem !== item))
                     }}
                   >
                     <View style={styles.favorite}>

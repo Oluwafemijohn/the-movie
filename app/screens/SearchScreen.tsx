@@ -11,6 +11,7 @@ import axios from "axios";
 import { API_KEY } from "../store/Constants";
 import MovieCard from "../components/MovieCard";
 import Route from "../navigation/Route";
+import _ from "lodash";
 
 function SearchScreen(props: any) {
   const [searchResults, setSearchResults] = useState<IMovieList[]>([]);
@@ -34,6 +35,8 @@ function SearchScreen(props: any) {
     fetchSearchResults(searchTerm);
   }, [searchTerm]);
 
+  const isEmpty = _.isEmpty(searchResults);
+
   return (
     <View style={styles.textInput}>
       <AppTextInput
@@ -44,30 +47,39 @@ function SearchScreen(props: any) {
         icon="search1"
         placeholder="Search"
       />
-      <FlatList
-        data={searchResults}
-        renderItem={({ item }) => (
-          <MovieCard
-            onPress={() =>
-              props.navigation.navigate(Route.MOVIE_DETAILS_SCREEN, 
-                item.id
-              )
-            }
-            movie={item}
-          />
-        )}
-        numColumns={2}
-        keyExtractor={(item) => item.id.toString()}
-      />
+      {isEmpty ? (
+        <Text style={styles.isEmpty}>Please type to search</Text>
+      ) : (
+        <FlatList
+          data={searchResults}
+          renderItem={({ item }) => (
+            <MovieCard
+              onPress={() =>
+                props.navigation.navigate(Route.MOVIE_DETAILS_SCREEN, item.id)
+              }
+              movie={item}
+            />
+          )}
+          numColumns={2}
+          keyExtractor={(item) => item.id.toString()}
+        />
+      )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   textInput: {
+    flex: 1,
     marginTop: 10,
     marginHorizontal: 10,
     marginBottom: 10,
+  },
+  isEmpty: {
+    fontSize: 20,
+    marginLeft: "auto",
+    marginRight: "auto",
+
   },
 });
 

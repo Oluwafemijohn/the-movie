@@ -13,6 +13,7 @@ import { widthPercentageToDP as WP } from "react-native-responsive-screen";
 import { API_KEY, img_300 } from "../store/Constants";
 import axios from "axios";
 import Route from "../navigation/Route";
+import MovieCard from "../components/MovieCard";
 
 function MovieListScreen(props: any) {
   const [page, setPage] = useState(1);
@@ -42,21 +43,16 @@ function MovieListScreen(props: any) {
       <FlatList
         data={newData}
         renderItem={({ item }) => (
-          <TouchableWithoutFeedback
+        
+            <MovieCard 
             onPress={() => {
               props.navigation.navigate(Route.MOVIE_DETAILS_SCREEN, item.id);
             }}
-          >
-            <View style={styles.listContainer}>
-              <Image
-                source={{ uri: `${img_300}/${item.backdrop_path}` }}
-                style={styles.image}
-              />
-              <Text style={styles.detailContainer}>{item.title}</Text>
-            </View>
-          </TouchableWithoutFeedback>
+            movie={item}   />
+       
         )}
         keyExtractor={(item) => item.id.toString()}
+
         onEndReached={() => {
           if (page < pageNumber) {
             setPage(page + 1);
@@ -76,6 +72,7 @@ function MovieListScreen(props: any) {
             </View>
           );
         }}
+        numColumns={2}
       />
     </View>
   );

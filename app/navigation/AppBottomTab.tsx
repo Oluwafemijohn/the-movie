@@ -3,9 +3,9 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import AppNavigation from "./AppNavigation";
 import FavouritesScreen from "../screens/FavouritesScreen";
 import { NavigationContainer } from "@react-navigation/native";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { MaterialIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons, MaterialIcons, AntDesign } from "@expo/vector-icons";
 import Route from "./Route";
+import SearchScreen from "../screens/SearchScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -21,7 +21,16 @@ function AppBottomTab() {
             tabBarIcon: ({ size, color }) => (
               <MaterialCommunityIcons name="movie" size={size} color={color} />
             ),
-            title:"Movies"
+            title: "Movies",
+          }}
+        />
+        <Tab.Screen
+          name={Route.SEARCH}
+          component={SearchScreen}
+          options={{
+            tabBarIcon: ({ size, color }) => (
+              <AntDesign name="search1" size={size} color={color} />
+            ),
           }}
         />
         <Tab.Screen

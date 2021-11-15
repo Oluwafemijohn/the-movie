@@ -6,6 +6,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { MaterialCommunityIcons, MaterialIcons, AntDesign } from "@expo/vector-icons";
 import Route from "./Route";
 import SearchScreen from "../screens/SearchScreen";
+import PopularMovieScreen from "../screens/PopularMovieScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -22,6 +23,17 @@ function AppBottomTab() {
               <MaterialCommunityIcons name="movie" size={size} color={color} />
             ),
             title: "Movies",
+          }}
+        />
+         <Tab.Screen
+          name={Route.POPULAR_MOVIES_TAB}
+          component={PopularMovieScreen}
+          options={{
+            headerShown: false,
+            tabBarIcon: ({ size, color }) => (
+              <MaterialCommunityIcons name="movie" size={size} color={color} />
+            ),
+            title: "Popular movies",
           }}
         />
         <Tab.Screen

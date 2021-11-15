@@ -40,9 +40,9 @@ function SearchScreen(props: any) {
   return (
     <View style={styles.textInput}>
       <AppTextInput
-        onChangeText={(searchWord: string) => {
-          setSearchTerm(searchWord);
-        }}
+        onChangeText={(searchWord: string) => 
+          setSearchTerm(searchWord)
+        }
         value={searchTerm}
         icon="search1"
         placeholder="Search"

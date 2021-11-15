@@ -4,7 +4,13 @@ import { AntDesign } from "@expo/vector-icons";
 
 import defaultStyle from "../store/defaultStyle";
 
-function AppTextInput({ icon, width="100%", value,  ...otherProps }) {
+interface IProps {
+  icon: string;
+  width: string;
+  onChangeText:(text:string)=>void;
+}
+
+function AppTextInput({ icon, width="100%", ...otherProps }) {
   return (
     <View style={[styles.container, {width}]}>
       {icon && (
@@ -19,7 +25,6 @@ function AppTextInput({ icon, width="100%", value,  ...otherProps }) {
         placeholderTextColor={defaultStyle.colors.medium}
         style={defaultStyle.text}
         {...otherProps}
-        // value={value}
         width={width}
       />
     </View>

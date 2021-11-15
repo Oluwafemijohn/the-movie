@@ -14,7 +14,7 @@ interface IMovieCard {
     onPress: any;
 }
 
-function MovieCard<IMovieCard>({ movie, onPress }) {
+function MovieCard({ movie, onPress }) {
   return (
     <TouchableWithoutFeedback onPress={onPress}>
       <View style={styles.listContainer}>
@@ -41,11 +41,11 @@ const styles = StyleSheet.create({
     // padding: 10,
     // borderRadius: 10,
     // backgroundColor: '#fff',
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.8,
-    shadowRadius: 2,
-    elevation: 1,
+    // shadowColor: "#000",
+    // shadowOffset: { width: 0, height: 2 },
+    // shadowOpacity: 0.8,
+    // shadowRadius: 2,
+    // elevation: 1,
     width: WP(44),
   },
   image: {

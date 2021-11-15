@@ -94,20 +94,6 @@ const styles = StyleSheet.create({
     paddingRight: WP(4),
     paddingTop: WP(2),
   },
-  listContainer: {
-    borderRadius: WP(4),
-    marginBottom: WP(4),
-    backgroundColor: "white",
-    overflow: "hidden",
-  },
-  detailContainer: {
-    padding: WP(4),
-    fontSize: WP(5),
-  },
-  image: {
-    width: "100%",
-    height: WP(50),
-  },
 });
 
 export default MovieListScreen;

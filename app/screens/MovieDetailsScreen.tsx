@@ -34,8 +34,6 @@ function MovieDetailsScreen(props: any) {
   const [favorite, setFavorite] = useRecoilState(useGlobalFavoriteState);
 
   const arrCheck = favorite.filter((item) => item.id === movieContent?.id);
-  console.log(id)
-
 
   return (
     <View style={styles.container}>

@@ -36,10 +36,7 @@ function FavouritesScreen(props: any) {
       if (!netInfo.isInternetReachable) {
         setFavorite(data as IMoveDetails[]);
       }
-        
-      // }
-      // setFavorite(data);
-      console.log("data", data);
+      
     })
     .catch((err) => {
       console.log(err);
